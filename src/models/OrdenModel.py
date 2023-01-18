@@ -4,7 +4,7 @@ class OrdenModel(db.Model):
   __tablename__ = 'orden'
 
   id = db.Column(db.Integer, primary_key=True)
-  date = db.Column(db.String(50))
+  date = db.Column(db.Date)
   client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
   product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
 
