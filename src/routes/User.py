@@ -15,6 +15,7 @@ def get_users():
     list = []
     for user in users:
       list.append({
+        "id": user.id,
         "username": user.username,
         "name": user.name,
         "lastname": user.lastname,
@@ -26,7 +27,23 @@ def get_users():
     return jsonify({'message': str(ex)})
 
 
-
+@user.route('/<id>')
+def get_user(id):
+  try:
+    user = UserModel.query.get(id)
+    if user != None:
+      return jsonify({
+        "id": id,
+        "username": user.username,
+        "name": user.name,
+        "lastname": user.lastname,
+        "password": user.password,
+        "pet_id": user.pet_id,
+      })
+    return jsonify({'message': 'User not found.'})
+  except Exception as ex:
+    return jsonify({'message': str(ex)})
+  
 
 @user.route('/add', methods=['POST'])
 def add_user():
@@ -42,6 +59,7 @@ def add_user():
     db.session.commit()
 
     return jsonify({
+      "id": user.id,
       "username": user.username,
       "name": user.name,
       "lastname": user.lastname,
@@ -49,5 +67,48 @@ def add_user():
       "pet_id": user.pet_id,
     })
 
+  except Exception as ex:
+    return jsonify({'message': str(ex)})
+
+
+@user.route('/delete/<id>', methods=['DELETE'])
+def delete_user(id):
+  try:
+    user = UserModel.query.get(id)
+    if user != None:
+      db.session.delete(user)
+      db.session.commit()
+      return jsonify({
+        "username": user.username,
+        "name": user.name,
+        "lastname": user.lastname,
+        "password": user.password,
+        "pet_id": user.pet_id,
+      })
+    return jsonify({'message': 'User not deleted.'})
+  except Exception as ex:
+    return jsonify({'message': str(ex)})
+
+
+@user.route('/update/<id>', methods=['PUT'])
+def update_user(id):
+  try:
+    user = UserModel.query.get(id)
+    if user != None:
+      user.username = request.json['username']
+      user.name = request.json['name']
+      user.lastname = request.json['lastname']
+      user.password = request.json['password']
+      user.pet_id = request.json['pet_id']
+      db.session.commit()
+      return jsonify({
+        "id": user.id,
+        "username": user.username,
+        "name": user.name,
+        "lastname": user.lastname,
+        "password": user.password,
+        "pet_id": user.pet_id,
+      })
+    return jsonify({'message': 'User not updated.'})
   except Exception as ex:
     return jsonify({'message': str(ex)})
