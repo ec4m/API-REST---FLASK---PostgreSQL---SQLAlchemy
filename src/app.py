@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 # Database
 from database.db import db
 # Routes
-from routes import Client, Product, Pet, User
+from routes import Client, Product, Pet, User, Orden
 
 # Configuraciones
 from config import DATABASE_CONNECTION_URI, secret_key
@@ -27,5 +27,6 @@ if __name__ == '__main__':
   app.register_blueprint(Product.product, url_prefix='/product')
   app.register_blueprint(Pet.pet, url_prefix='/pet')
   app.register_blueprint(User.user, url_prefix='/user')
+  app.register_blueprint(Orden.orden, url_prefix='/orden')
 
   app.run(debug=True, port=3000)

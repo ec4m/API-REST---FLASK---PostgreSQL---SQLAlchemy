@@ -7,6 +7,7 @@ class ClientModel(db.Model):
   name = db.Column(db.String(50))
   lastname = db.Column(db.String(50))
   age = db.Column(db.Integer)
+  ordenes = db.relationship('OrdenModel')
 
 
   def __init__(self, name, lastname, age):
